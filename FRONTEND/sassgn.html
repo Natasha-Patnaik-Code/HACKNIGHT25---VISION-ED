@@ -1,0 +1,194 @@
+<html>
+    <head>
+        <title>DASHBOARD</title>
+        <style>
+            body{
+                background: #e3f9fd;
+                font-family: Arial, sans-serif;
+                text-align: center;
+            }
+            #assignments{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                max-width: 800px;
+                background-color: rgb(96, 185, 209);
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 50px;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            #assignments:hover {
+                transform: scale(1.05);
+            }
+
+            button {
+                display: inline-block;
+                padding: 14px 28px;
+                background: white;
+                color: #007bff;
+                font-size: 20px;
+                text-decoration: none;
+                border-radius: 30px;
+                transition: 0.3s;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                margin: 10px;
+            }
+
+            #stop-speech {
+                display: none;
+            }
+
+            #start-speech {
+                display: inline;
+            }
+
+            .assignment {
+                background: #fff;
+                border: 1px solid #007bff;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 15px;
+                width: 100%;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .assignment h3 {
+                margin-top: 0;
+            }
+
+            .assignment a {
+                text-decoration: none;
+                color: #007bff;
+                font-weight: bold;
+            }
+
+            .assignment .input-container {
+                margin-top: 10px;
+            }
+
+            .assignment .url-input {
+                padding: 10px;
+                width: 100%;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+            }
+
+            .assignment .submit-btn {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .assignment .submit-btn:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1> Assignments</h1>
+        <button id="start-speech" onclick="textTospeech()">Start</button>
+        <button id="stop-speech" onclick="stopspeech()">Stop</button>
+        <button onclick="postAssgn()">Post Assignment</button><br>
+
+        <div id="assignments">
+            <div id="show"></div>
+        </div>
+
+        <script>
+            function postAssgn() {
+                let name = prompt("Enter Assignment Heading: ");
+                let message = prompt("Enter subject of assignments or message: ");
+                let link = prompt("Enter drive link of relevant document: ");
+                
+                let child = document.createElement("div");
+                child.classList.add("assignment");
+
+                child.innerHTML = `
+                    <h3>${name}</h3>
+                    <p>${message}</p>
+                    <a href="${link}" target="_blank">View Document</a>
+                    
+                    <div class="input-container">
+                        <input type="text" class="url-input" placeholder="Enter new URL">
+                        <button class="submit-btn" onclick="submitUrl(this)">Submit</button>
+                    </div>
+                    <div class="submitted-url"></div>
+                `;
+
+                document.getElementById("show").appendChild(child);
+            }
+
+            function displayAssgn() {
+                let element = document.getElementById("show");
+                let data = [{
+                    name: "Maths Unit 1 Assignment",
+                    message: "Complete the following questions and submit the hard copy by 14 March 2025.",
+                    url: "https://biueo541gbc82jn9fnc.pdf"
+                }];
+
+                data.forEach(assignment => {
+                    let assignmentDiv = document.createElement("div");
+                    assignmentDiv.classList.add("assignment");
+
+                    assignmentDiv.innerHTML = `
+                        <h3>${assignment.name}</h3>
+                        <p>${assignment.message}</p>
+                        <a href="${assignment.url}" target="_blank">View Document</a>
+                        
+                        <div class="input-container">
+                            <input type="text" class="url-input" placeholder="Enter new URL">
+                            <button class="submit-btn" onclick="submitUrl(this)">Submit</button>
+                        </div>
+                        <div class="submitted-url"></div>
+                    `;
+                    
+                    element.appendChild(assignmentDiv);
+                });
+            }
+
+            displayAssgn();
+
+            function submitUrl(button) {
+                const inputField = button.previousElementSibling; 
+                const url = inputField.value;
+
+                if (url) {
+                    const urlContainer = button.nextElementSibling; 
+                    urlContainer.innerHTML = `<a href="${url}" target="_blank">View New Document</a>`;
+
+                    inputField.value = ''; 
+                } else {
+                    alert('Please enter a URL.');
+                }
+            }
+
+            function textTospeech() {
+                let text = document.getElementById("show").innerText;
+                let speech = new SpeechSynthesisUtterance();
+                document.getElementById("start-speech").style.display = "none";
+                document.getElementById("stop-speech").style.display = "inline";
+                speech.text = text;
+                speech.volume = 1;
+                speech.rate = 1;
+                speech.pitch = 1;
+                window.speechSynthesis.speak(speech);
+            }
+
+            function stopspeech() {
+                window.speechSynthesis.cancel();
+                document.getElementById("start-speech").style.display = "inline";
+                document.getElementById("stop-speech").style.display = "none";
+            }
+        </script>
+    </body>
+</html>

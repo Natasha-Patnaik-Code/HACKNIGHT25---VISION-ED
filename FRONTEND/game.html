@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Scramble Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            background-size:cover;
+            background: linear-gradient(135deg, #a86eff, #ff88eb);
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            
+        }
+        .container {
+            text-align: center;
+            background: rgb(137, 127, 127,0.5);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+        h1 {
+            color: #f4eded;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        #scrambled-word {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2b2d89;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            border: 2px solid #685cb4;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #2b2f6a;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #ff9966;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f7f0f0;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Word Scramble Game</h1>
+        <p id="scrambled-word">Loading...</p>
+        <input type="text" id="user-input" placeholder="Enter your guess">
+        <button class="btn" onclick="checkAnswer()">Submit</button>
+        <button class="btn" onclick="startNewGame()">New Puzzle</button>
+        <p id="timer">Time: 30s</p>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const words = ["education", "learning", "university", "knowledge", "student", "professor", "computer", "javascript", "python"];
+        let correctWord = "";
+        let timeLeft = 30;
+        let timer;
+
+        function scrambleWord(word) {
+            return word.split('').sort(() => Math.random() - 0.5).join('');
+        }
+
+        function generatePuzzle() {
+            clearInterval(timer);
+            correctWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("scrambled-word").textContent = scrambleWord(correctWord);
+            document.getElementById("result").textContent = "";
+            document.getElementById("user-input").value = "";
+            startTimer();
+        }
+
+        function checkAnswer() {
+            let userGuess = document.getElementById("user-input").value.toLowerCase();
+            if (userGuess === correctWord) {
+                document.getElementById("result").textContent = "✅ Correct! Well done!";
+                clearInterval(timer);
+            } else {
+                document.getElementById("result").textContent = "❌ Try again!";
+            }
+        }
+
+        function startTimer() {
+            timeLeft = 30;
+            document.getElementById("timer").textContent = `Time: ${timeLeft}s`;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").textContent = `Time: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.getElementById("result").textContent = "⏳ Time's up! Try again.";
+                }
+            }, 1000);
+        }
+
+        function startNewGame() {
+            generatePuzzle();
+        }
+
+        window.onload = generatePuzzle;
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clubs List</title>
+    <link rel="stylesheet" href="nav.css">
+    <script src="speech.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            height: 100vh;
+            width: 100vw;
+            padding-top: 10px;
+            background: #1358ee;
+            color: #fff;
+        }
+
+        header {
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(141, 138, 138, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+        }
+
+        #clubs-container {
+            margin-top: 0px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .clubs-container {
+            max-width: 1000px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+        }
+
+        h2,
+        h3 {
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 2.1rem;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-top: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            padding-bottom: 10px;
+            color: rgb(82, 72, 72);
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h4 {
+            margin: 10px 0;
+            font-size: 1.5rem;
+            color: #fff;
+            z-index: 2;
+        }
+
+        .card a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 15px;
+            transition: background 0.3s ease;
+            z-index: 2;
+        }
+
+        .card a:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .loading-message {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .navbar ul {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .clubs-container {
+                padding: 15px;
+            }
+
+            .card {
+                width: 90%;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>VISION'ED</h1>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="alumni.html">Alumni</a></li>
+            <li><a href="clubs.html">Clubs</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+            <li><button id="start-speech" onclick="textTospeech()">Speak</button></li>
+            <li><button id="stop-speech" onclick="stopspeech()">🛑Stop</button></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Clubs</h1>
+    </header>
+
+    <div id="clubs-container">
+        <p id="loading-message" class="loading-message">Loading clubs...</p>
+    </div>
+
+    <script>
+        async function fetchClubs() {
+            try {
+                let events = [
+                    { club_name: "CodeCrafters", club_website: "https://assymetric.com", club_type: "technical" },
+                    { club_name: "AI Innovators", club_website: "https://ai-innovators.com", club_type: "technical" },
+                    { club_name: "CyberSec Warriors", club_website: "https://cybersec-warriors.com", club_type: "technical" },
+                    { club_name: "Literary League", club_website: "https://literary-league.com", club_type: "nontechnical" },
+                    { club_name: "Sports Squad", club_website: "https://sport.com", club_type: "nontechnical" },
+                    { club_name: "Euphonic Music", club_website: "https://euphonic-music.com", club_type: "nontechnical" }
+                ];
+
+                const groupedclubs = {};
+
+                events.forEach(event => {
+                    if (!groupedclubs[event.club_type]) {
+                        groupedclubs[event.club_type] = [];
+                    }
+                    groupedclubs[event.club_type].push(event);
+                });
+
+                let container = document.getElementById("clubs-container");
+                container.innerHTML = "";
+
+                for (let type in groupedclubs) {
+                    let section = document.createElement("div");
+                    section.innerHTML = `
+                        <h2>${type.charAt(0).toUpperCase() + type.slice(1)} Clubs</h2>
+                        <div class="row"></div>
+                    `;
+
+                    groupedclubs[type].forEach(club => {
+                        let card = document.createElement("div");
+                        card.classList.add("card");
+                        card.innerHTML = `
+                            <h3>${club.club_name}</h3>
+                            <a href="${club.club_website}" target="_blank" style="color:black">Visit Club</a>
+                        `;
+
+                        section.querySelector(".row").appendChild(card);
+                    });
+
+                    container.appendChild(section);
+                }
+            } catch (err) {
+                console.error("Error fetching clubs", err);
+                document.getElementById("loading-message").innerText = "Failed to load clubs.";
+            }
+        }
+
+        fetchClubs();
+    </script>
+</body>
+
+</html>

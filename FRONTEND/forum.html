@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forum - Student Projects</title>
+    <link rel="stylesheet" href="nav.css">
+    <script src="speech.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #1358ee;
+            color: #f2eaea;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @keyframes bg {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 100%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 20px 0;
+        }
+
+        #projectForm {
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            width: 60%;
+        }
+
+        #projectForm input,
+        #projectForm textarea,
+        #projectForm button {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        #projectForm button {
+            cursor: pointer;
+            background: #000;
+            color: #fff;
+        }
+
+        #projects-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.3);
+            text-align: center;
+            width: 280px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: scale(1.05);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+        }
+
+        .project-card p {
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>VISION'ED</h1>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="alumni.html">Alumni</a></li>
+            <li><a href="clubs.html">Clubs</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+            <li><button id="start-speech" onclick="textTospeech()">Speak</button></li>
+            <li><button id="stop-speech" onclick="stopspeech()">🛑Stop</button></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Community Forum</h1>
+    </header>
+
+    <form id="projectForm">
+        <input type="text" id="projectName" placeholder="Enter Post Title" required />
+        <textarea id="projectDescription" placeholder="Enter Description" required></textarea>
+        <button type="submit">Post+</button>
+    </form>
+
+    <div id="projects-container"></div>
+
+    <script>
+        document
+            .getElementById("projectForm")
+            .addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                let name = document.getElementById("projectName").value.trim();
+                let description = document
+                    .getElementById("projectDescription")
+                    .value.trim();
+
+                if (name === "" || description === "") {
+                    alert("Please enter both title and description!");
+                    return;
+                }
+
+                let container = document.getElementById("projects-container");
+                let card = document.createElement("div");
+                card.classList.add("project-card");
+                card.innerHTML = `
+          <h3>${name}</h3>
+          <p>${description}</p>
+        `;
+
+                container.appendChild(card);
+                this.reset();
+            });
+    </script>
+</body>
+
+</html>

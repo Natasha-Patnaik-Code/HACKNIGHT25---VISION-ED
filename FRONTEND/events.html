@@ -1,0 +1,216 @@
+<html>
+
+<head>
+    <title>EVENTS</title>
+    <link rel="stylesheet" href="nav.css">
+    <script src="speech.js"></script>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #1358ee;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin : auto;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
+            backdrop-filter: blur(8px);
+        }
+
+        h2 {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            font-size: 2.1rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            color: #000000;
+        }
+
+        h3 {
+            text-align: left;
+            font-size: 1.8rem;
+            margin-top: 0px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            padding-bottom: 5px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .card {
+            background: linear-gradient(to bottom right, #3d2da8, #1976d2);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h4 {
+            margin: 10px 0;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .card a {
+            display: inline-block;
+            margin-top: 0px;
+            text-decoration: none;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .card a:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        header {
+            color: white;
+            text-align: center;
+            text-transform: uppercase;
+            padding: 20px;
+            margin: 15px;
+            background: rgba(0, 0, 0, 0);
+            box-shadow: 0 4px 10px rgba(141, 138, 138, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>VISION'ED</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="alumni.html">Alumni</a></li>
+            <li><a href="clubs.html">Clubs</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+            <li><button id="start-speech" onclick="textTospeech()">Speak</button></li>
+            <li><button id="stop-speech" onclick="stopspeech()">🛑Stop</button></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Events</h1>
+    </header>
+
+    <div class="container">
+        <div id="event-container"></div>
+    </div>
+
+    <script>
+        async function fetchEvents() {
+            try {
+                let events = [
+                    {
+                        event_name: "Sports Day",
+                        event_date: "2025-04-01",
+                        event_website: "https://sportsday.com",
+                        event_type: "Sports"
+                    },
+                    {
+                        event_name: "Tech Talk",
+                        event_date: "2025-04-15",
+                        event_website: "https://techtalk.com",
+                        event_type: "Academics"
+                    },
+                    {
+                        event_name: "Alumni Meet",
+                        event_date: "2025-05-01",
+                        event_website: "https://alumni.com",
+                        event_type: "Alumni"
+                    },
+                    {
+                        event_name: "Music Concert",
+                        event_date: "2025-05-10",
+                        event_website: "https://musicconcert.com",
+                        event_type: "Cultural"
+                    },
+                    {
+                        event_name: "WACA Chess Meet",
+                        event_date: "2025-05-23",
+                        event_website: "https://wacachess.com",
+                        event_type: "Sports"
+                    }
+                ];
+
+                const groupedEvents = {};
+
+                events.forEach(event => {
+                    if (!groupedEvents[event.event_type]) {
+                        groupedEvents[event.event_type] = [];
+                    }
+                    groupedEvents[event.event_type].push(event);
+                });
+
+                let container = document.getElementById("event-container");
+                container.innerHTML = "";
+
+                for (let type in groupedEvents) {
+                    let section = document.createElement("div");
+                    section.innerHTML = `<h2>${type}</h2><div class="row"></div>`;
+
+                    groupedEvents[type].forEach(event => {
+                        let card = document.createElement("div");
+                        card.classList.add("card");
+                        card.innerHTML = ` 
+                                <h3>${event.event_name}</h3>
+                                <p>Date: ${event.event_date}</p>
+                                <a href="${event.event_website}" target="_blank">Visit Event</a>
+                            `;
+
+                        section.querySelector(".row").appendChild(card);
+                    });
+
+                    container.appendChild(section);
+                }
+            } catch (err) {
+                console.error("Error fetching events", err);
+            }
+        }
+
+        fetchEvents();
+    </script>
+
+    <script>
+        
+    </script>
+</body>
+
+</html>

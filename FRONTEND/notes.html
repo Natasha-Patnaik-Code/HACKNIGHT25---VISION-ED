@@ -1,0 +1,119 @@
+<head>
+    <title>Notes</title>
+    <style>
+        body {
+            background: linear-gradient(blue, lightblue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        input, textarea {
+            width: 300px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #notesList {
+            margin-top: 20px;
+            width: 300px;
+        }
+
+        #notesList div {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #notesList button {
+            margin-top: 10px;
+            background-color: red;
+        }
+
+        @media (max-width: 600px) {
+            input, textarea, button {
+                width: 100%;
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>My Notes 📝</h2>
+    <input type="text" id="noteTitle" placeholder="Title">
+    <textarea id="noteContent" placeholder="Write your note..."></textarea>
+    <button onclick="saveNote()">Save Note</button>
+
+    <div id="notesList"></div>
+
+    <script>
+        const studentId = 1; 
+        let notes = []; 
+
+        async function loadNotes() {
+            const notesList = document.getElementById("notesList");
+            notesList.innerHTML = "";
+            notes.forEach((note, index) => {
+                notesList.innerHTML += `
+                    <div>
+                        <h3>${note.title}</h3>
+                        <p>${note.content}</p>
+                        <button onclick="deleteNote(${index})">Delete</button>
+                    </div>
+                `;
+            });
+        }
+
+        function saveNote() {
+            const title = document.getElementById("noteTitle").value;
+            const content = document.getElementById("noteContent").value;
+
+            const newNote = { title, content };
+            notes.push(newNote);
+
+            loadNotes();
+
+            document.getElementById("noteTitle").value = "";
+            document.getElementById("noteContent").value = "";
+        }
+
+        function deleteNote(index) {
+            notes.splice(index, 1);
+
+            loadNotes();
+        }
+
+        loadNotes();
+    </script>
+</body>

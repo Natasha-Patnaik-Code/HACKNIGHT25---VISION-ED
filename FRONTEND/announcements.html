@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANNOUNCEMENTS</title>
+    <link rel="stylesheet" href="announcements.css">
+    <link rel="stylesheet" href="nav.css">
+    <script src="speech.js"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>VISION'ED</h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="alumni.html">Alumni</a></li>
+            <li><a href="clubs.html">Clubs</a></li>
+            <li><a href="forum.html">Community Forum</a></li>
+            <li><button id="start-speech" onclick="textTospeech()">Speak</button></li>
+            <li><button id="stop-speech" onclick="stopspeech()">🛑Stop</button></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Announcements</h1>
+    </header>
+
+    <div class="container">
+        <div id="announcement-container"></div>
+    </div>
+
+    <script>
+        let announcements = [
+            { title: "Announcement 1", message: "This is the first announcement", date: "2025-03-06T10:00:00" },
+            { title: "Announcement 2", message: "This is the second announcement", date: "2025-03-05T14:30:00" },
+        ];
+
+        async function fetchAnnouncements() {
+            let container = document.getElementById("announcement-container");
+            container.innerHTML = "";
+
+            announcements.forEach(a => {
+                let div = document.createElement("div");
+                div.classList.add("announcement-card");
+                div.innerHTML = `<h3>${a.title}</h3><p>${a.message}</p><small>${new Date(a.date).toLocaleString()}</small>`;
+                container.appendChild(div);
+            });
+        }
+        fetchAnnouncements();
+    </script>
+</body>
+
+</html>
